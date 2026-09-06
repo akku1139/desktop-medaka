@@ -72,6 +72,11 @@ class Fish:
                 out, self.hidden_state = self.nn(obs.unsqueeze(0), self.hidden_state)
                 self.turn = torch.tanh(out[0,0]).item()
                 self.accel = torch.tanh(out[0,1]).item()
+                # 次回推論間隔の計算（0.05秒〜0.5秒）
+                interval_raw = torch.sigmoid(out[0,2]).item()
+                min_interval = 0.05
+                max_interval = 0.5
+                self.inference_interval = min_interval + interval_raw * (max_interval - min_interval)
             self.time_since_inference = 0.0
             self.energy -= 0.01  # 推論コスト
 
