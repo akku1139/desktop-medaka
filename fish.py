@@ -128,7 +128,7 @@ class Fish:
             self.angle = np.arctan2(self.vy, self.vx) + np.random.uniform(-0.5, 0.5)
 
         # エネルギー消費（基礎代謝＋運動）
-        self.energy -= 0.05 * dt
+        self.energy -= 0.08 * dt
         self.energy -= 0.05 * speed * dt
 
         # 餌を食べる
