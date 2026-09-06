@@ -16,9 +16,12 @@ config = {
 vis = Visualizer(config["width"], config["height"])
 
 env = Environment(config)
-nn = SimpleRNN()
-fish = Fish(config, nn)
-env.fish_list.append(fish)
+
+num_fish = 10
+for _ in range(num_fish):
+    nn = SimpleRNN()  # 個体ごとに別のNN
+    fish = Fish(config, nn)
+    env.fish_list.append(fish)
 
 # 餌を初期配置
 env.add_food_random(30)
