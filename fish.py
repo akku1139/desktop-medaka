@@ -8,7 +8,7 @@ class Fish:
         self.vx = 0.0
         self.vy = 0.0
         self.angle = np.random.rand() * 2 * np.pi
-        self.energy = 300.0
+        self.energy = 500.0
         self.age = 0
         self.nn = nn
         self.inference_interval = 0.2  # 5Hz
@@ -19,8 +19,8 @@ class Fish:
         self.alive = True
 
         # 学習関連
-        self.learning_rate = 0.01          # 学習率
-        self.plasticity_cost_factor = 0.001 # 可塑性コスト係数
+        self.learning_rate = 0.05          # 学習率
+        self.plasticity_cost_factor = 0.0005 # 可塑性コスト係数
         self.elig_ih = torch.zeros_like(nn.rnn.weight_ih)  # 入力→隠れ層の適格度跡
         self.elig_hh = torch.zeros_like(nn.rnn.weight_hh)  # 隠れ層→隠れ層の適格度跡
         self.elig_decay = 0.9              # 適格度跡の減衰率
@@ -128,8 +128,8 @@ class Fish:
             self.angle = np.arctan2(self.vy, self.vx) + np.random.uniform(-0.5, 0.5)
 
         # エネルギー消費（基礎代謝＋運動）
-        self.energy -= 0.1 * dt
-        self.energy -= 0.1 * speed * dt
+        self.energy -= 0.05 * dt
+        self.energy -= 0.05 * speed * dt
 
         # 餌を食べる
         ate_food = False
@@ -142,7 +142,7 @@ class Fish:
 
         # 報酬が得られたら学習を実行
         if ate_food:
-            reward = 20.0  # 餌のエネルギー量（報酬信号）
+            reward = 30.0  # 餌のエネルギー量（報酬信号）
             with torch.no_grad():
                 # 適格度跡に報酬を掛けて重み更新量を計算
                 delta_w_ih = self.learning_rate * reward * self.elig_ih

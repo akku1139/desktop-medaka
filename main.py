@@ -8,8 +8,8 @@ config = {
     "width": 1000,
     "height": 600,
     "dt": 0.01,
-    "food_spawn_rate": 0.005,
-    "max_food": 30,
+    "food_spawn_rate": 0.008,
+    "max_food": 50,
 }
 
 def run_simulation(learning_enabled, seed):

@@ -10,14 +10,14 @@ class Environment:
         self.time = 0
 
     def add_food_random(self, n):
-        for _ in range(n):
-            self.food_list.append({
-                "x": np.random.rand() * self.width,
-                "y": np.random.rand() * self.height,
-                "energy": 20.0,
-                "age": 0,
-                "max_age": 600,  # ticks (10秒)
-            })
+            for _ in range(n):
+                self.food_list.append({
+                    "x": np.random.rand() * self.width,
+                    "y": np.random.rand() * self.height,
+                    "energy": 30.0,
+                    "age": 0,
+                    "max_age": 600,  # ticks (10秒)
+                })
 
     def step(self, dt):
         self.time += dt
