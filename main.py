@@ -21,7 +21,7 @@ def run_simulation(learning_enabled, seed):
     for i in range(num_fish):
         nn = SimpleRNN()
         fish = Fish(config, nn)
-        fish.learning_rate = 0.01 if learning_enabled else 0.0
+        fish.learning_rate = 0.05 if learning_enabled else 0.0
         env.fish_list.append(fish)
 
     env.add_food_random(15)
