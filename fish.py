@@ -2,7 +2,7 @@ import numpy as np
 import torch
 
 class Fish:
-    def __init__(self, config, nn):
+    def __init__(self, config, nn, variable_interval=True):
         self.x = np.random.rand() * config["width"]
         self.y = np.random.rand() * config["height"]
         self.vx = 0.0
@@ -11,7 +11,8 @@ class Fish:
         self.energy = 500.0
         self.age = 0
         self.nn = nn
-        self.inference_interval = 0.2  # 5Hz
+        self.variable_interval = variable_interval
+        self.inference_interval = 0.2  # 5Hz（初期値）
         self.time_since_inference = 0.0
         self.hidden_state = torch.zeros(1, 16)
         self.turn = 0.0
@@ -72,11 +73,13 @@ class Fish:
                 out, self.hidden_state = self.nn(obs.unsqueeze(0), self.hidden_state)
                 self.turn = torch.tanh(out[0,0]).item()
                 self.accel = torch.tanh(out[0,1]).item()
-                # 次回推論間隔の計算（0.05秒〜0.5秒）
-                interval_raw = torch.sigmoid(out[0,2]).item()
-                min_interval = 0.05
-                max_interval = 0.5
-                self.inference_interval = min_interval + interval_raw * (max_interval - min_interval)
+                if self.variable_interval:
+                    # 次回推論間隔の計算（0.05秒〜0.5秒）
+                    interval_raw = torch.sigmoid(out[0,2]).item()
+                    min_interval = 0.05
+                    max_interval = 0.5
+                    self.inference_interval = min_interval + interval_raw * (max_interval - min_interval)
+                # variable_interval=Falseの場合は0.2秒固定のまま
             self.time_since_inference = 0.0
             self.energy -= 0.01  # 推論コスト
 

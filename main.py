@@ -12,7 +12,7 @@ config = {
     "max_food": 30,
 }
 
-def run_simulation(learning_enabled, seed):
+def run_simulation(learning_enabled, seed, variable_interval=True):
     np.random.seed(seed)
     torch.manual_seed(seed)
     env = Environment(config)
@@ -20,7 +20,7 @@ def run_simulation(learning_enabled, seed):
     num_fish = 5
     for i in range(num_fish):
         nn = SimpleRNN()
-        fish = Fish(config, nn)
+        fish = Fish(config, nn, variable_interval=variable_interval)
         fish.learning_rate = 0.05 if learning_enabled else 0.0
         env.fish_list.append(fish)
 
@@ -42,15 +42,15 @@ def run_simulation(learning_enabled, seed):
     # 最終的な生存時間と個体数を返す
     return step * config["dt"], len(env.fish_list)
 
-# 実験実行
-learning_results = []
-no_learning_results = []
+# 実験実行（固定推論頻度 vs 可変推論頻度）
+fixed_interval_results = []
+variable_interval_results = []
 
 for seed in range(10):
-    t_survive, n_survive = run_simulation(True, seed)
-    learning_results.append((t_survive, n_survive))
-    t_survive, n_survive = run_simulation(False, seed)
-    no_learning_results.append((t_survive, n_survive))
+    t_survive, n_survive = run_simulation(True, seed, variable_interval=False)
+    fixed_interval_results.append((t_survive, n_survive))
+    t_survive, n_survive = run_simulation(True, seed, variable_interval=True)
+    variable_interval_results.append((t_survive, n_survive))
 
-print("学習あり:", learning_results)
-print("学習なし:", no_learning_results)
+print("固定推論頻度:", fixed_interval_results)
+print("可変推論頻度:", variable_interval_results)
